@@ -602,6 +602,7 @@ class UNetModel(nn.Module):
                     ds //= 2
                 self.output_blocks.append(TimestepEmbedSequential(*layers))
                 self._feature_size += ch
+        '''
         self.depth_blocks=nn.Sequential(
             nn.Conv2d(in_channels, out_ch, kernel_size=3, stride=stride, padding=1, bias=False),
             nn.BatchNorm2d(out_ch),
@@ -609,6 +610,7 @@ class UNetModel(nn.Module):
             nn.Conv2d(out_ch, out_ch, kernel_size=3, stride=1, padding=1, bias=False),
             nn.BatchNorm2d(out_ch),
         )
+        '''
         self.out = nn.Sequential(
             normalization(ch, dtype=self.dtype),
             get_activation(activation),
@@ -653,7 +655,7 @@ class UNetModel(nn.Module):
             emb = emb + aug_emb.to(emb)
 
         emb = self.activation_layer(emb)
-        depth_feature=self.depth_blocks(depth)
+        depth_feature=depth  ###
         h = x.type(self.dtype)
         for module in self.input_blocks:
             h = module(h, emb, encoder_out)
